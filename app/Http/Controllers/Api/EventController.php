@@ -5,16 +5,29 @@ namespace App\Http\Controllers\Api;
 use Throwable;
 use Carbon\Carbon;
 use App\Models\Event;
+use App\Events\EventCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use Illuminate\Support\Facades\Event as EventFacade;
+use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
 {
     public function events()
     {
-        return response()->json(Event::all());
+        EventFacade::dispatch(new EventCreated());
+
+        $events = cache('events', function () {
+            return Event::get();
+        });
+
+        return response()->json([
+            "success" => true,
+            "message" => "Event List",
+            "data" => $events
+        ]);
     }
 
     public function activeEvents()
@@ -35,6 +48,8 @@ class EventController extends Controller
     {
         try {
             Event::create($request->post());
+
+            return;
         } catch (Throwable $e) {
             report($e);
      
@@ -48,6 +63,8 @@ class EventController extends Controller
             try {
                 $event = Event::where('id', $id)->first();
                 $event->fill($request->post())->save();
+
+                return;
             } catch (Throwable $e) {
                 report($e);
          
@@ -56,6 +73,8 @@ class EventController extends Controller
         } else {
             try {
                 Event::create($request->post());
+
+                
             } catch (Throwable $e) {
                 report($e);
          
