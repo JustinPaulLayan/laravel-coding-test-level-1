@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Events\EventCreated;
 use App\Traits\IdAsUuidTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +24,10 @@ class Event extends Model
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => EventCreated::class
     ];
 
     protected static function boot()

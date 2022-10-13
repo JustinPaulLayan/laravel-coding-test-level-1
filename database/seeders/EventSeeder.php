@@ -18,7 +18,7 @@ class EventSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        foreach( range(1, 5) as $index ){
+        foreach( range(1, 20) as $index ){
             Event::create([
                 'name' => $faker->name(),
                 'startAt' => $faker->dateTime(),

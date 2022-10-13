@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Mail\EventCreatedMail;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 
@@ -28,6 +30,10 @@ class EventController extends Controller
     public function store(StoreEventRequest $request)
     {
         Event::create($request->post());
+
+        $description = "Event ".$request->name." is created";
+
+        Mail::to(auth()->user()->email)->send(new EventCreatedMail($description));
 
         return redirect()->route('events')->with('success','Event has been created successfully.');
     }

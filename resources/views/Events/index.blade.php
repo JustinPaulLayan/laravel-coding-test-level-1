@@ -22,18 +22,19 @@
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
                 <h1 class="text-xl font-semibold text-gray-900">Events</h1>
+                <a href="{{ route('externalapi') }}" class="pt-2 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">External Api Page</a>
             </div>
             <form action="{{ route('events') }}" method="GET" role="search">
-
-                <div class="input-group">
-                    <span class="input-group-btn mr-5 mt-1">
+                @csrf
+                <div class="mx-2">
+                    <span class="input-group-btn mt-1">
                         <button class="btn btn-info" type="submit" title="Search event">
                             <span class="fas fa-search"></span>
                         </button>
                     </span>
                     <input type="text" class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" name="name" placeholder="Search event" id="name">
                     <a href="{{ route('events') }}" class=" mt-1">
-                        <span class="input-group-btn">
+                        <span>
                             <button class="btn btn-danger" type="button" title="Refresh page">
                                 <span class="fas fa-sync-alt"></span>
                             </button>
@@ -41,9 +42,11 @@
                     </a>
                 </div>
             </form>
-            <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <a href="{{ route('event.create') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Event</a>
-            </div>
+            @auth
+                <div class="sm:flex-none">
+                    <a href="{{ route('event.create') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Event</a>
+                </div>
+            @endauth
         </div>
         <div class="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
             <table class="min-w-full divide-y divide-gray-300">
@@ -72,12 +75,14 @@
                             <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ $event->startAt }}</td>
                             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{{ $event->endAt }}</td>
                             <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                <form action="{{ route('event.destroy',$event->id) }}" method="Post">
-                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ route('event.edit',$event->id) }}">Edit</a>
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                </form>
+                                @auth
+                                    <form action="{{ route('event.destroy',$event->id) }}" method="Post">
+                                        <a class="text-indigo-600 hover:text-indigo-900" href="{{ route('event.edit',$event->id) }}">Edit</a>
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                @endauth
                             </td>
                         </tr>
                     @endforeach

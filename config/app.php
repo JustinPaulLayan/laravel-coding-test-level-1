@@ -15,6 +15,8 @@ return [
     |
     */
 
+    'guzzle_test_url' => env('GUZZLE_TEST_URL'),
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
