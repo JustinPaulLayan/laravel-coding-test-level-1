@@ -17,8 +17,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string("slug")->nullable();
-            $table->timestamp("startAt");
-            $table->timestamp("endAt");
+            $table->timestamp("startAt")->nullable();
+            $table->timestamp("endAt")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
