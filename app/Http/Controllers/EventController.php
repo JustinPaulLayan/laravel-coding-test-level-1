@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Event;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
+
+class EventController extends Controller
+{
+    public function index(Request $request)
+    {
+        $events = Event::where('name', 'LIKE', '%' . $request->name . '%')->paginate(5);
+        return view('events.index', ['events' => $events]);
+    }
+
+    public function show(Event $event)
+    {
+        return view('events.show', ['event' => $event]);
+    }
+    
+    public function create()
+    {
+        return view('events.create');
+    }
+
+    public function store(StoreEventRequest $request)
+    {
+        Event::create($request->post());
+
+        return redirect()->route('events')->with('success','Event has been created successfully.');
+    }
+
+    public function edit(Event $event)
+    {
+        return view('events.edit', ['event' => $event]);
+    }
+
+    public function update(UpdateEventRequest $request, Event $event)
+    {
+        $event->fill($request->post())->save();
+
+        return redirect()->route('events')->with('success','Event Has Been updated successfully');
+    }
+
+    public function destroy(Event $event)
+    {
+        $event->delete();
+        return redirect()->route('events')->with('success','Event has been deleted successfully');
+    }
+}

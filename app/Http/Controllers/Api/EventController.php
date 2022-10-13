@@ -34,11 +34,7 @@ class EventController extends Controller
     public function store(StoreEventRequest $request)
     {
         try {
-            Event::create([
-                'name' => $request->input('name'),
-                'startAt' => $request->input('startAt'),
-                'endAt' => $request->input('endAt'),
-            ]);
+            Event::create($request->post());
         } catch (Throwable $e) {
             report($e);
      
@@ -50,11 +46,8 @@ class EventController extends Controller
     {
         if (Event::where('id', $id)->exists()) {
             try {
-                Event::where('id', $id)->update([
-                    'name' => $request->input('name'),
-                    'startAt' => $request->input('startAt'),
-                    'endAt' => $request->input('endAt'),
-                ]);
+                $event = Event::where('id', $id)->first();
+                $event->fill($request->post())->save();
             } catch (Throwable $e) {
                 report($e);
          
@@ -62,11 +55,7 @@ class EventController extends Controller
             }
         } else {
             try {
-                Event::create([
-                    'name' => $request->input('name'),
-                    'startAt' => $request->input('startAt'),
-                    'endAt' => $request->input('endAt'),
-                ]);
+                Event::create($request->post());
             } catch (Throwable $e) {
                 report($e);
          
@@ -78,11 +67,7 @@ class EventController extends Controller
     public function patch(UpdateEventRequest $request, Event $event)
     {
         try {
-            $event->update([
-                'name' => $request->input('name'),
-                'startAt' => $request->input('startAt'),
-                'endAt' => $request->input('endAt'),
-            ]);
+            $event->fill($request->post())->save();
 
             return 'Successfully Updated';
         } catch (Throwable $e) {
