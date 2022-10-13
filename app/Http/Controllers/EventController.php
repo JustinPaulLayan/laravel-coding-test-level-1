@@ -14,17 +14,17 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $events = Event::where('name', 'LIKE', '%' . $request->name . '%')->paginate(5);
-        return view('events.index', ['events' => $events]);
+        return view('Events.index', ['events' => $events]);
     }
 
     public function show(Event $event)
     {
-        return view('events.show', ['event' => $event]);
+        return view('Events.show', ['event' => $event]);
     }
     
     public function create()
     {
-        return view('events.create');
+        return view('Events.create');
     }
 
     public function store(StoreEventRequest $request)
@@ -40,7 +40,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-        return view('events.edit', ['event' => $event]);
+        return view('Events.edit', ['event' => $event]);
     }
 
     public function update(UpdateEventRequest $request, Event $event)
